@@ -18,12 +18,25 @@ From inside this dir:
 
 ```bash
 mkdir -p ~/.codex/hooks ~/.local/bin
-cp AGENTS.md         ~/.codex/AGENTS.md
+cp AGENTS.md          ~/.codex/AGENTS.md
 cp settings-user.toml ~/.codex/config.toml
-cp hooks/precheck.sh ~/.codex/hooks/precheck.sh
-cp bin/carc-codex    ~/.local/bin/carc-codex
+cp hooks/precheck.sh  ~/.codex/hooks/precheck.sh
+cp bin/carc-codex     ~/.local/bin/carc-codex
 chmod +x ~/.codex/hooks/precheck.sh ~/.local/bin/carc-codex
 ```
+
+This is the Codex equivalent of the Claude user install:
+
+| Claude Code | Codex |
+|---|---|
+| `~/.claude/CLAUDE.md` | `~/.codex/AGENTS.md` |
+| `~/.claude/settings.json` | `~/.codex/config.toml` |
+| `~/.claude/hooks/precheck.sh` | `~/.codex/hooks/precheck.sh` |
+| `claude` | `carc-codex` |
+
+The extra `cp bin/carc-codex ~/.local/bin/carc-codex` line matters. It gives
+students a managed launch command that forces the CARC sandbox, approval mode,
+and hook settings when Codex starts.
 
 Back up any pre-existing `~/.codex/AGENTS.md` / `~/.codex/config.toml` first if you have them — the `cp`s overwrite.
 
