@@ -89,7 +89,10 @@ running with workspace-write sandboxing and untrusted approvals.
 If you run raw `codex` instead, it will read `~/.codex/config.toml`, but a
 user-owned config is only a default. The `carc-codex` wrapper is the recommended
 user-tier command because it passes the intended startup settings each time and
-blocks obvious bypass flags.
+blocks obvious bypass flags. In particular, it starts Codex with
+workspace-write sandboxing, untrusted approvals, command network access off,
+browser/computer-use features disabled, live web search disabled, and the CARC
+precheck hook wired in.
 
 ## 5. Good Student Workflows
 

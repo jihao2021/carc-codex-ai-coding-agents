@@ -6,9 +6,16 @@
 
 sandbox_mode = "workspace-write"
 approval_policy = "untrusted"
+web_search = "disabled"
+
+[sandbox_workspace_write]
+network_access = false
 
 [features]
 hooks = true
+browser_use = false
+computer_use = false
+in_app_browser = false
 
 [[hooks.PreToolUse]]
 matcher = "^(Bash|apply_patch|Edit|Write|Read|MultiEdit|NotebookEdit)$"

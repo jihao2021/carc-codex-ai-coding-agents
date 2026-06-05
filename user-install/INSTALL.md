@@ -6,7 +6,7 @@ User install still includes the `carc-codex` wrapper. The normal `codex`
 command will read `~/.codex/config.toml`, but those settings are user-owned
 defaults, not admin-enforced requirements. The wrapper gives workshop users one
 recommended command that starts Codex with the intended CARC sandbox, approval,
-and hook settings, and blocks the most obvious bypass flags.
+network, feature, and hook settings, and blocks the most obvious bypass flags.
 
 This dir contains everything you need:
 
@@ -42,13 +42,33 @@ This is the Codex equivalent of the Claude user install:
 
 The extra `cp bin/carc-codex ~/.local/bin/carc-codex` line matters. It gives
 students a recommended launch command that forces the CARC sandbox, approval
-mode, and hook settings when Codex starts. It is not equivalent to
-`/etc/codex/requirements.toml`; users can still choose to run raw `codex`.
+mode, network-off workspace setting, disabled browser/computer-use surfaces,
+disabled live web search, and hook settings when Codex starts. It is not
+equivalent to `/etc/codex/requirements.toml`; users can still choose to run raw
+`codex`.
 
 Back up any pre-existing `~/.codex/AGENTS.md` / `~/.codex/config.toml` first if you have them — the `cp`s overwrite.
 
 Start `~/.local/bin/carc-codex`. Approve hooks when prompted. `/hooks` and
 `/permissions` inside Codex confirm what loaded.
+
+## What the wrapper overrides
+
+When users start `carc-codex`, it passes these startup settings even if their
+`~/.codex/config.toml` has drifted:
+
+- `--sandbox workspace-write`
+- `--ask-for-approval untrusted`
+- `--disable browser_use`
+- `--disable computer_use`
+- `--disable in_app_browser`
+- `sandbox_workspace_write.network_access=false`
+- `web_search="disabled"`
+- the CARC `PreToolUse` hook under `~/.codex/hooks/precheck.sh`
+
+It also rejects obvious attempts to turn those back on through `carc-codex`,
+such as `--search`, `--enable computer_use`,
+`--sandbox danger-full-access`, and `--ask-for-approval never`.
 
 ## Ship to another user
 
