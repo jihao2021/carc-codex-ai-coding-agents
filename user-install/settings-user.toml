@@ -1,0 +1,18 @@
+# User-tier CARC Codex settings.
+#
+# This mirrors root-install/managed-settings.toml but points the hook at the
+# user's home directory. It is a default, not a hard boundary: students can edit
+# user-owned config or run raw `codex` unless CARC exposes only the managed
+# `carc-codex` launcher/module.
+
+sandbox_mode = "workspace-write"
+approval_policy = "untrusted"
+
+[features]
+hooks = true
+
+[hooks]
+PreToolUse = [
+  { matcher = "exec_command", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 },
+  { matcher = "apply_patch", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 },
+]

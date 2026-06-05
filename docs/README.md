@@ -57,7 +57,7 @@ cd carc-codex-ai-coding-agents/user-install
 
 mkdir -p ~/.codex/hooks ~/.local/bin
 cp AGENTS.md ~/.codex/AGENTS.md
-cp config.toml ~/.codex/config.toml
+cp settings-user.toml ~/.codex/config.toml
 cp hooks/precheck.sh ~/.codex/hooks/precheck.sh
 cp bin/carc-codex ~/.local/bin/carc-codex
 chmod +x ~/.codex/hooks/precheck.sh ~/.local/bin/carc-codex

@@ -3,7 +3,8 @@
 This repo packages a Codex-first CARC safety pattern:
 
 - `AGENTS.md` for model-visible CARC operating rules
-- `config.toml` for Codex sandbox, approval, and hook defaults
+- `managed-settings.toml` / `settings-user.toml` for Codex sandbox, approval,
+  and hook defaults
 - `bin/carc-codex` launcher wrappers for root and user installs
 - `hooks/precheck.sh` for CARC-specific dynamic checks
 - `tests/` for dry-run validation of `ALLOW`, `ASK`, and `BLOCK` decisions
@@ -56,7 +57,8 @@ the supported workflow.
 - Validate current CARC paths, quotas, partitions, and login-node hostnames.
 - Run `python3 tests/test_precheck.py --no-danger user-install/hooks/precheck.sh`.
 - On a CARC test node, run the full gated danger suite intentionally.
-- Verify `config.toml` parses with Python `tomllib`.
+- Verify `managed-settings.toml` and `settings-user.toml` parse with Python
+  `tomllib`.
 - Verify `codex debug prompt-input` accepts the hook TOML shape.
 - Start `carc-codex`, then check `/hooks` and `/permissions`.
 - Confirm audit log location, permissions, retention, and review ownership.

@@ -6,7 +6,7 @@ This dir contains everything you need:
 
 ```
 AGENTS.md
-config.toml
+settings-user.toml
 bin/carc-codex
 hooks/precheck.sh
 INSTALL.md          (this file)
@@ -19,7 +19,7 @@ From inside this dir:
 ```bash
 mkdir -p ~/.codex/hooks ~/.local/bin
 cp AGENTS.md         ~/.codex/AGENTS.md
-cp config.toml       ~/.codex/config.toml
+cp settings-user.toml ~/.codex/config.toml
 cp hooks/precheck.sh ~/.codex/hooks/precheck.sh
 cp bin/carc-codex    ~/.local/bin/carc-codex
 chmod +x ~/.codex/hooks/precheck.sh ~/.local/bin/carc-codex
@@ -42,7 +42,9 @@ Send them `codex-cfg-carc.tar.gz`. They `tar xzf` it, `cd user-install`, and fol
 
 ## Caveat — user tier is NOT a boundary
 
-This is your default, not policy. In user-tier:
+`settings-user.toml` mirrors the root-tier policy shape, but it installs under
+your home directory as `~/.codex/config.toml`. This is your default, not policy.
+In user-tier:
 
 - `--dangerously-bypass-approvals-and-sandbox` still works.
 - A student can edit `~/.codex/config.toml`.
