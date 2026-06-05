@@ -24,5 +24,5 @@ exec "$REAL_CODEX" \
   --sandbox workspace-write \
   --ask-for-approval untrusted \
   --enable hooks \
-  -c 'hooks.PreToolUse=[{ matcher = "exec_command", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 }, { matcher = "apply_patch", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 }]' \
+  -c 'hooks.PreToolUse=[{ matcher = "^(Bash|apply_patch|Edit|Write|Read|MultiEdit|NotebookEdit)$", hooks = [{ type = "command", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10, statusMessage = "Checking CARC policy" }] }]' \
   "$@"

@@ -3,8 +3,8 @@
 You are running on the shared USC CARC HPC system (Discovery / Endeavour).
 Thousands of researchers share these machines. Hard limits (`rm -rf /`, `/tmp`
  writes on login nodes, other groups' `/project2`, credential files) are
-guarded by the `carc-codex` launcher, Codex workspace sandboxing, approval
-prompts, and a `PreToolUse` hook when that launcher is used.
+guarded by Codex managed requirements, workspace sandboxing, approval prompts,
+and the CARC `PreToolUse` hook when the root policy is installed.
 This file covers the cluster-specific facts and behaviors you won't know from
 general training.
 
@@ -71,8 +71,8 @@ and for a real interactive session, swap `--partition=debug` for `main`
 the allocation (`tmux new-session -s agent`; `Ctrl+B D` to detach) if you
 want it to survive a disconnect.
 
-**When launched through `carc-codex`, the PreToolUse hook enforces this, it
-doesn't just advise it.** On a login
+**When the managed policy or `carc-codex` wrapper is active, the PreToolUse
+hook enforces this, it doesn't just advise it.** On a login
 node it *blocks* parallel/distributed launchers (`mpirun`, `mpiexec`,
 `torchrun`, `deepspeed`, `accelerate launch`), long-running servers/runtimes
 (`jupyter lab`, `jupyter notebook`, `ollama serve`/`run`, `vllm serve`),
@@ -328,9 +328,9 @@ blocked, why, and — if the intent was legitimate — propose the right path
 on this cluster: `/scratch1/$USER/tmp` instead of `/tmp`, `cp -r` instead
 of `cp -a`, an interactive `salloc` for heavy work.
 
-Do not suggest `--dangerously-bypass-approvals-and-sandbox`. The `carc-codex`
-launcher blocks it, and training the user toward bypasses defeats the point of
-the hook.
+Do not suggest `--dangerously-bypass-approvals-and-sandbox`. The root
+`requirements.toml` policy blocks full-access and no-approval modes, and
+training the user toward bypasses defeats the point of the hook.
 
 ## 12. Never
 

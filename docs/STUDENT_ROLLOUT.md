@@ -3,9 +3,11 @@
 This repo packages a Codex-first CARC safety pattern:
 
 - `AGENTS.md` for model-visible CARC operating rules
-- `managed-settings.toml` / `settings-user.toml` for Codex sandbox, approval,
+- `requirements.toml` for root-owned Codex requirements that students cannot
+  weaken from user config
+- `managed_config.toml` / `settings-user.toml` for Codex sandbox, approval,
   and hook defaults
-- `bin/carc-codex` launcher wrappers for root and user installs
+- `bin/carc-codex` launcher wrapper for no-root/user-tier pilots
 - `hooks/precheck.sh` for CARC-specific dynamic checks
 - `tests/` for dry-run validation of `ALLOW`, `ASK`, and `BLOCK` decisions
 
@@ -15,31 +17,30 @@ into accidental blast radius.
 
 ## Recommended Pilot
 
-1. Start with a small cohort and a single supported launch command:
-   `carc-codex`.
+1. Start with a small cohort and a recent Codex CLI version that supports
+   `/etc/codex/requirements.toml`.
 2. Deploy `root-install/` on one test login node first.
-3. Expose `carc-codex` through a CARC module or course setup instructions.
+3. Let students run the normal `codex` command once the root policy is active.
 4. Use `user-install/` only for workshops and personal pilots.
 5. Keep `tests/` in CI and run it before every policy change.
 6. Review audit logs during the pilot and tune repeated false positives.
 
 ## Boundary Model
 
-Codex does not use the same `/etc/claude-code/managed-settings.json` mechanism
-as Claude Code. For Codex, the practical boundary in this repo is:
+Recent Codex CLI versions support root-owned Unix/Linux policy files under
+`/etc/codex/`. For Codex, the practical boundary in this repo is:
 
-- a root-owned `carc-codex` launcher
-- forced `--sandbox workspace-write`
-- forced `--ask-for-approval untrusted`
-- forced hook wiring
-- launcher-level blocking of the dangerous bypass/full-access options
+- `/etc/codex/requirements.toml` for admin-enforced requirements
+- `/etc/codex/managed_config.toml` for managed defaults
+- `/etc/codex/hooks/precheck.sh` for CARC dynamic checks
+- blocked `danger-full-access` and `approval never`
+- managed hook wiring with unmanaged hooks disabled
 - model-visible `AGENTS.md` instructions
 - Codex's own project trust, sandbox, approval, and hook review flows
 
-This is enforceable only if students use the managed launcher or if CARC
-controls the module/PATH environment so unmanaged `codex` invocations are not
-the supported workflow. It is not sufficient as a security boundary if students
-can install their own Codex binary and reach model services directly. See
+This is enforceable for Codex clients that honor `/etc/codex/requirements.toml`.
+It is not sufficient as a complete cluster boundary if students can install an
+old/unmanaged client and reach model services directly. See
 [`ADMIN_ENFORCEMENT.md`](ADMIN_ENFORCEMENT.md) for the admin-side network,
 credential, and proxy controls.
 
@@ -60,10 +61,11 @@ credential, and proxy controls.
 - Validate current CARC paths, quotas, partitions, and login-node hostnames.
 - Run `python3 tests/test_precheck.py --no-danger user-install/hooks/precheck.sh`.
 - On a CARC test node, run the full gated danger suite intentionally.
-- Verify `managed-settings.toml` and `settings-user.toml` parse with Python
-  `tomllib`.
+- Verify `requirements.toml`, `managed_config.toml`, and `settings-user.toml`
+  parse with Python `tomllib`.
 - Verify `codex debug prompt-input` accepts the hook TOML shape.
-- Start `carc-codex`, then check `/hooks` and `/permissions`.
+- Install `root-install/`, start `codex`, then check `/hooks` and
+  `/permissions`.
 - Confirm audit log location, permissions, retention, and review ownership.
 - Confirm `python3`, `bash`, `tr`, `id`, and `hostname` exist on login and compute nodes.
 - Decide whether students authenticate individually or through a course-approved billing/gateway setup.

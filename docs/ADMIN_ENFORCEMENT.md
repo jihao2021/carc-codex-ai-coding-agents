@@ -1,7 +1,17 @@
 # Admin Enforcement Notes
 
-`carc-codex` is a supported safe entrypoint. It is not, by itself, a cluster
-security boundary.
+Codex supports a root-owned managed policy layer on Unix/Linux. For CARC, that
+should be the primary Codex-side enforcement path:
+
+- `/etc/codex/requirements.toml` for admin-enforced requirements users cannot
+  weaken from `~/.codex/config.toml` or CLI config overrides
+- `/etc/codex/managed_config.toml` for managed launch defaults
+- `/etc/codex/hooks/precheck.sh` for CARC-specific dynamic checks
+
+`carc-codex` can still be useful for no-root workshops, but it is no longer
+required as the root/admin enforcement mechanism.
+
+## Why network policy still matters
 
 Students can install or copy their own Codex binary. The standalone installer
 is intentionally simple:
@@ -12,33 +22,34 @@ curl -fsSL https://chatgpt.com/codex/install.sh | sh
 
 Students may also install Codex with npm, use a binary downloaded elsewhere, or
 bring a copy from another machine. Because of that, a CARC deployment should not
-depend on the wrapper as the only control.
+depend on PATH or a wrapper as the only control.
 
-## What the wrapper can enforce
+## What `/etc/codex/requirements.toml` can enforce
 
-When students use `carc-codex`, the launcher can consistently apply:
+For Codex clients that honor the managed policy layer, CARC can enforce:
 
-- workspace-write sandboxing
-- untrusted approval mode
-- CARC precheck hooks
-- CARC-specific `AGENTS.md` operating guidance
-- launcher-level blocking for dangerous Codex flags
-- a consistent support and training path for classes and workshops
+- allowed approval policies, excluding `never`
+- allowed sandbox modes, excluding `danger-full-access`
+- managed lifecycle hooks from `/etc/codex/hooks`
+- optional skipping of user, project, session, and plugin hooks
+- command rules that prompt or forbid selected command prefixes
+- feature pins such as disabling browser/computer-use surfaces on the cluster
+- deny-read rules for common credential locations
 
-This is valuable for user experience, teaching, and normal support. It helps
-students do the right thing without remembering every option.
+This is stronger than a wrapper because it follows the normal `codex` command
+as long as the installed Codex version supports managed requirements.
 
-## What the wrapper cannot enforce
+## What managed Codex config cannot enforce
 
-The wrapper cannot stop a student from running another `codex` binary if the
-cluster allows that binary to reach the model service. In particular, it cannot
-reliably prevent:
+Managed config cannot stop a student from running an old, modified, or
+otherwise unmanaged `codex` binary if the cluster allows that binary to reach
+the model service. In particular, it cannot reliably prevent:
 
 - `curl -fsSL https://chatgpt.com/codex/install.sh | sh`
 - `npm install -g @openai/codex`
 - copied binaries under `$HOME`, `/project2`, or `/scratch1`
 - direct use of personal ChatGPT or API credentials
-- command-line flags passed to an unmanaged Codex binary
+- command-line flags passed to an unmanaged client that ignores requirements
 
 Blocking only the installer URL is also incomplete. A student can use another
 installer path, copy a binary, or update from a different machine.
@@ -49,8 +60,8 @@ For real enforcement, make the model access path the controlled boundary:
 
 ```text
 student shell
-  -> module load codex-carc
-  -> root-owned carc-codex wrapper
+  -> normal codex command
+  -> /etc/codex/requirements.toml + managed hooks
   -> CARC-managed proxy or gateway
   -> approved AI provider endpoint
 ```
@@ -68,19 +79,20 @@ through a CARC-managed proxy or gateway that can enforce:
 - abuse response and account revocation
 
 If direct outbound access remains open, students can use unmanaged clients and
-personal credentials. In that case, `carc-codex` should be described as the
-supported configuration, not a mandatory security boundary.
+personal credentials. In that case, `/etc/codex/requirements.toml` should be
+described as the enforced policy for supported Codex clients, not as a complete
+cluster-wide network boundary.
 
 ## Practical cluster controls
 
 A defensible CARC rollout combines several layers:
 
-- Install the supported Codex binary and `carc-codex` wrapper in root-owned
-  paths.
-- Provide an Lmod module such as `codex-carc` that puts the wrapper first on
-  `PATH`.
-- Optionally provide both `codex` and `carc-codex` command names in the module
-  so normal `codex` usage still lands on the managed launcher.
+- Install `/etc/codex/requirements.toml`, `/etc/codex/managed_config.toml`,
+  and `/etc/codex/hooks/precheck.sh` as root-owned files.
+- Install or recommend a recent Codex CLI version that supports managed
+  requirements.
+- Use a module only if CARC wants to distribute a specific Codex binary version
+  or standardize PATH; the policy should not depend on renaming the command.
 - Keep direct OpenAI, ChatGPT, npm, and release download access aligned with the
   campus network policy. Do not treat URL blocking as the only defense.
 - Use Slurm cgroups, login-node process limits, filesystem quotas, Unix
@@ -89,35 +101,32 @@ A defensible CARC rollout combines several layers:
 - Prefer a proxy-issued or centrally brokered credential over personal keys for
   course-managed usage.
 
-## Example Lmod pattern
+## Optional Lmod pattern
 
-The module should make the managed path the default:
+The module can distribute a root-owned Codex binary while still letting users
+type the normal `codex` command:
 
 ```lua
-help([[Load the CARC-supported Codex wrapper.]])
+help([[Load the CARC-supported Codex CLI.]])
 
-local root = "/apps/codex-carc"
+local root = "/apps/codex"
 
 prepend_path("PATH", pathJoin(root, "bin"))
-setenv("CARC_CODEX_POLICY_ROOT", "/etc/codex-carc")
-setenv("CARC_CODEX_REAL", pathJoin(root, "libexec", "codex"))
 
-whatis("CARC-supported Codex wrapper for Discovery")
+whatis("CARC-supported Codex CLI for Discovery")
 ```
 
-In this layout, `/apps/codex-carc/bin/carc-codex` is the wrapper and
-`/apps/codex-carc/libexec/codex` is the root-owned real Codex binary. A second
-wrapper named `/apps/codex-carc/bin/codex` can point to `carc-codex` if CARC
-wants the ordinary `codex` command to use the managed policy by default.
+In this layout, `/apps/codex/bin/codex` is the supported Codex CLI. The managed
+policy still lives under `/etc/codex/`.
 
 ## Recommended wording for instructors
 
 Use language like this in course material:
 
-> `carc-codex` is the only supported Codex command for this class on Discovery.
-> It configures the sandbox, permissions, and CARC safety checks. Other Codex
-> installations are not supported for course work and may be blocked by cluster
-> network policy.
+> Use the normal `codex` command on Discovery. CARC manages Codex policy through
+> root-owned `/etc/codex/requirements.toml`, including sandbox, permissions,
+> and CARC safety checks. Unmanaged or outdated Codex installations are not
+> supported for course work and may be blocked by cluster network policy.
 
-That wording is honest: the support path is the wrapper, and the enforcement
-path is the cluster network and credential policy.
+That wording is honest: the Codex-side support path is `/etc/codex/`, and the
+hard cluster boundary is still the network and credential policy.

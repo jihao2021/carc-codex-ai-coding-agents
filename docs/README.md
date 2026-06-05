@@ -1,8 +1,8 @@
 # Using Codex on CARC Discovery
 
-This is the student-facing quick start for running the `carc-codex` wrapper
-on USC CARC Discovery. Use this for a personal pilot or workshop. For a class
-or shared cluster rollout, prefer the root/module setup in
+This is the student-facing quick start for running Codex on USC CARC
+Discovery. Use the user-tier wrapper for a personal pilot or workshop. For a
+class or shared cluster rollout, prefer the root-managed setup in
 [`root-install/`](../root-install/INSTALL.md).
 
 ## 1. Log in to Discovery
@@ -48,7 +48,7 @@ OpenAI's Codex CLI docs describe installation with
 
 ## 3. Install the CARC Codex wrapper
 
-Clone this repo and install the user-tier bundle:
+For a personal no-root pilot, clone this repo and install the user-tier bundle:
 
 ```bash
 cd ~
@@ -136,7 +136,8 @@ curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
 For a course, workshop, or shared CARC deployment, install
-[`root-install/`](../root-install/INSTALL.md) as root and expose only
-`carc-codex` through the supported module or course instructions. For real
-enforcement, pair the wrapper with cluster network, credential, and proxy
-controls described in [`ADMIN_ENFORCEMENT.md`](ADMIN_ENFORCEMENT.md).
+[`root-install/`](../root-install/INSTALL.md) as root. That setup uses
+`/etc/codex/requirements.toml`, so students can run the normal `codex`
+command. For real cluster-wide enforcement, pair the managed files with
+network, credential, and proxy controls described in
+[`ADMIN_ENFORCEMENT.md`](ADMIN_ENFORCEMENT.md).

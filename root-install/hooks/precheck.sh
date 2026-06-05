@@ -1,5 +1,5 @@
 #!/bin/bash
-# /etc/codex-carc/hooks/precheck.sh
+# CARC Codex precheck hook
 #
 # PreToolUse hook for Codex on the CARC/USC HPC cluster.
 # Runs before every Bash/Write/Edit/Read tool call. Three jobs:

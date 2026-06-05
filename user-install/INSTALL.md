@@ -55,8 +55,8 @@ Send them `codex-cfg-carc.tar.gz`. They `tar xzf` it, `cd user-install`, and fol
 
 ## Caveat — user tier is NOT a boundary
 
-`settings-user.toml` mirrors the root-tier policy shape, but it installs under
-your home directory as `~/.codex/config.toml`. This is your default, not policy.
+`settings-user.toml` mirrors the root-tier defaults, but it installs under your
+home directory as `~/.codex/config.toml`. This is your default, not policy.
 In user-tier:
 
 - `--dangerously-bypass-approvals-and-sandbox` still works.
@@ -64,5 +64,6 @@ In user-tier:
 - A student can run `codex` directly instead of `carc-codex`.
 - Project-local config, hooks, or exec policies may still apply once the project is trusted.
 
-For a stronger classroom or cluster boundary, expose only the root-installed
-`carc-codex` launcher through the supported module or course instructions.
+For a stronger classroom or cluster boundary, install
+`root-install/requirements.toml` as `/etc/codex/requirements.toml` and
+`root-install/managed_config.toml` as `/etc/codex/managed_config.toml`.

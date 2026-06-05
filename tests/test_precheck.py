@@ -42,7 +42,7 @@ USAGE
     python3 test_precheck.py --no-danger # skip danger cases entirely
 
 If PATH is omitted it looks for ../root-install/hooks/precheck.sh,
-../user-install/hooks/precheck.sh, then /etc/codex-carc/hooks/precheck.sh.
+../user-install/hooks/precheck.sh, then /etc/codex/hooks/precheck.sh.
 
 NOTE: this script tests the hook's own behavior, not the full live Codex
 launcher/sandbox/approval stack.
@@ -73,7 +73,7 @@ def find_hook(argv_path):
         os.path.join(here, "..", "hooks", "precheck.sh"),
         os.path.join(os.getcwd(), "hooks", "precheck.sh"),
         # fallback: a real system install
-        "/etc/codex-carc/hooks/precheck.sh",
+        "/etc/codex/hooks/precheck.sh",
     ]
     for c in cands:
         c = os.path.abspath(c)
