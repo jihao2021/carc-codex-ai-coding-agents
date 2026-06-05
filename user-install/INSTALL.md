@@ -2,11 +2,10 @@
 
 For your own account without root, or to ship to another CARC user.
 
-User install still includes the `carc-codex` wrapper. The normal `codex`
-command will read `~/.codex/config.toml`, but those settings are user-owned
-defaults, not admin-enforced requirements. The wrapper gives workshop users one
-recommended command that starts Codex with the intended CARC sandbox, approval,
-network, feature, and hook settings, and blocks the most obvious bypass flags.
+User install is config-first: it overwrites `~/.codex/config.toml` with CARC
+defaults so users can start Codex with the normal `codex` command. The optional
+`carc-codex` wrapper is included only for no-root workshops that want a stronger
+recommended launch command.
 
 This dir contains everything you need:
 
@@ -27,8 +26,7 @@ mkdir -p ~/.codex/hooks ~/.local/bin
 cp AGENTS.md          ~/.codex/AGENTS.md
 cp settings-user.toml ~/.codex/config.toml
 cp hooks/precheck.sh  ~/.codex/hooks/precheck.sh
-cp bin/carc-codex     ~/.local/bin/carc-codex
-chmod +x ~/.codex/hooks/precheck.sh ~/.local/bin/carc-codex
+chmod +x ~/.codex/hooks/precheck.sh
 ```
 
 This is the Codex equivalent of the Claude user install:
@@ -38,23 +36,32 @@ This is the Codex equivalent of the Claude user install:
 | `~/.claude/CLAUDE.md` | `~/.codex/AGENTS.md` |
 | `~/.claude/settings.json` | `~/.codex/config.toml` |
 | `~/.claude/hooks/precheck.sh` | `~/.codex/hooks/precheck.sh` |
-| `claude` | `carc-codex` |
+| `claude` | `codex` |
 
-The extra `cp bin/carc-codex ~/.local/bin/carc-codex` line matters. It gives
-students a recommended launch command that forces the CARC sandbox, approval
-mode, network-off workspace setting, disabled browser/computer-use surfaces,
-disabled live web search, and hook settings when Codex starts. It is not
-equivalent to `/etc/codex/requirements.toml`; users can still choose to run raw
-`codex`.
+Back up any pre-existing `~/.codex/AGENTS.md` or `~/.codex/config.toml` first
+if you have them. The `cp settings-user.toml ~/.codex/config.toml` line
+intentionally overwrites the user's default Codex config for this account.
 
-Back up any pre-existing `~/.codex/AGENTS.md` / `~/.codex/config.toml` first if you have them — the `cp`s overwrite.
+Start Codex normally:
 
-Start `~/.local/bin/carc-codex`. Approve hooks when prompted. `/hooks` and
-`/permissions` inside Codex confirm what loaded.
+```bash
+codex
+```
 
-## What the wrapper overrides
+Approve hooks when prompted. `/hooks` and `/permissions` inside Codex confirm
+what loaded.
 
-When users start `carc-codex`, it passes these startup settings even if their
+## Optional wrapper
+
+For a no-root workshop where you want one stronger recommended launch command,
+also install the wrapper:
+
+```bash
+cp bin/carc-codex ~/.local/bin/carc-codex
+chmod +x ~/.local/bin/carc-codex
+```
+
+When users start `carc-codex`, it passes these startup settings even if
 `~/.codex/config.toml` has drifted:
 
 - `--sandbox workspace-write`
@@ -69,6 +76,9 @@ When users start `carc-codex`, it passes these startup settings even if their
 It also rejects obvious attempts to turn those back on through `carc-codex`,
 such as `--search`, `--enable computer_use`,
 `--sandbox danger-full-access`, and `--ask-for-approval never`.
+
+The wrapper is still user-owned and optional. For true enforcement, use the
+root install's `/etc/codex/requirements.toml`.
 
 ## Ship to another user
 
@@ -86,10 +96,11 @@ Send them `codex-cfg-carc.tar.gz`. They `tar xzf` it, `cd user-install`, and fol
 home directory as `~/.codex/config.toml`. This is your default, not policy.
 In user-tier:
 
+- Raw `codex` reads `~/.codex/config.toml`, but command-line flags can still
+  override user-owned defaults.
 - `carc-codex` blocks `--dangerously-bypass-approvals-and-sandbox`, but raw
   `codex` does not.
 - A student can edit `~/.codex/config.toml`.
-- A student can run `codex` directly instead of `carc-codex`.
 - Project-local config, hooks, or exec policies may still apply once the project is trusted.
 
 For a stronger classroom or cluster boundary, install

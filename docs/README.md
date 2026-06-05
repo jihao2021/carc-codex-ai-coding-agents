@@ -1,9 +1,9 @@
 # Using Codex on CARC Discovery
 
 This is the student-facing quick start for running Codex on USC CARC
-Discovery. Use the user-tier wrapper for a personal pilot or workshop because
-there is no root-owned policy layer in `~/.codex`. For a class or shared
-cluster rollout, prefer the root-managed setup in
+Discovery. The user-tier setup overwrites `~/.codex/config.toml`, so students
+can start with the normal `codex` command. For a class or shared cluster
+rollout, prefer the root-managed setup in
 [`root-install/`](../root-install/INSTALL.md).
 
 ## 1. Log in to Discovery
@@ -47,9 +47,9 @@ codex --login
 OpenAI's Codex CLI docs describe installation with
 `npm install -g @openai/codex` and authentication with `codex --login`.
 
-## 3. Install the CARC Codex wrapper
+## 3. Install the CARC Codex defaults
 
-For a personal no-root pilot, clone this repo and install the user-tier bundle:
+For a personal no-root pilot, clone this repo and install the user-tier config:
 
 ```bash
 cd ~
@@ -60,12 +60,12 @@ mkdir -p ~/.codex/hooks ~/.local/bin
 cp AGENTS.md ~/.codex/AGENTS.md
 cp settings-user.toml ~/.codex/config.toml
 cp hooks/precheck.sh ~/.codex/hooks/precheck.sh
-cp bin/carc-codex ~/.local/bin/carc-codex
-chmod +x ~/.codex/hooks/precheck.sh ~/.local/bin/carc-codex
+chmod +x ~/.codex/hooks/precheck.sh
 ```
 
 Back up existing `~/.codex/AGENTS.md` or `~/.codex/config.toml` first if you
-already use Codex on Discovery.
+already use Codex on Discovery. The `cp settings-user.toml ~/.codex/config.toml`
+line intentionally overwrites the user's default Codex settings.
 
 ## 4. Start Codex Safely
 
@@ -73,7 +73,7 @@ Start from a project or course work directory, not from your home root:
 
 ```bash
 cd /project2/<group>/<usc_netid>
-carc-codex
+codex
 ```
 
 Inside Codex, run:
@@ -86,13 +86,11 @@ Inside Codex, run:
 These should show that the CARC precheck hook is loaded and that Codex is
 running with workspace-write sandboxing and untrusted approvals.
 
-If you run raw `codex` instead, it will read `~/.codex/config.toml`, but a
-user-owned config is only a default. The `carc-codex` wrapper is the recommended
-user-tier command because it passes the intended startup settings each time and
-blocks obvious bypass flags. In particular, it starts Codex with
-workspace-write sandboxing, untrusted approvals, command network access off,
-browser/computer-use features disabled, live web search disabled, and the CARC
-precheck hook wired in.
+This user-tier setup relies on `~/.codex/config.toml`. That is enough for the
+normal `codex` command to pick up CARC defaults, but it is still user-owned.
+For no-root workshops that want a stronger recommended command, install
+`bin/carc-codex` as `~/.local/bin/carc-codex`; it passes the same startup
+settings every time and blocks obvious bypass flags.
 
 ## 5. Good Student Workflows
 
@@ -127,7 +125,7 @@ salloc --partition=debug --time=0:30:00 --cpus-per-task=4 --mem=8G
 srun --pty bash
 ```
 
-Then run `carc-codex` or the command you are testing inside that allocation.
+Then run `codex` or the command you are testing inside that allocation.
 For longer work, switch from `debug` to the appropriate project partition and
 request only the resources you need.
 

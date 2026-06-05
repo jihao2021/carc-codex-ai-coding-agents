@@ -26,10 +26,11 @@ The root setup installs `/etc/codex/requirements.toml`,
 can run the normal `codex` command; no CARC wrapper is required for the
 Codex-side policy layer.
 
-The user setup installs `~/.codex/config.toml`,
-`~/.codex/hooks/precheck.sh`, and an optional `~/.local/bin/carc-codex`
-launcher. It is useful for personal pilots and workshops, but it is not an
-admin boundary because students own those files.
+The user setup installs `~/.codex/config.toml` and
+`~/.codex/hooks/precheck.sh`, so users can run the normal `codex` command with
+CARC defaults. It also includes an optional `~/.local/bin/carc-codex` launcher
+for no-root workshops that want a stronger recommended command. User-tier
+config is not an admin boundary because students own those files.
 
 Important enforcement note: `/etc/codex/requirements.toml` controls recent
 Codex clients, but it does not stop a user from running an old or unmanaged
