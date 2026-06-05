@@ -129,7 +129,14 @@ is blocked, move the work into Slurm instead of bypassing the wrapper.
 
 The user-tier install is a helpful default, not a hard security boundary.
 Students can still edit files under `~/.codex` or run raw `codex` directly.
+They can also self-install Codex, for example with:
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
 
 For a course, workshop, or shared CARC deployment, install
 [`root-install/`](../root-install/INSTALL.md) as root and expose only
-`carc-codex` through the supported module or course instructions.
+`carc-codex` through the supported module or course instructions. For real
+enforcement, pair the wrapper with cluster network, credential, and proxy
+controls described in [`ADMIN_ENFORCEMENT.md`](ADMIN_ENFORCEMENT.md).

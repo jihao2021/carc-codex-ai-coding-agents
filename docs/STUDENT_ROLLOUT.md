@@ -38,7 +38,10 @@ as Claude Code. For Codex, the practical boundary in this repo is:
 
 This is enforceable only if students use the managed launcher or if CARC
 controls the module/PATH environment so unmanaged `codex` invocations are not
-the supported workflow.
+the supported workflow. It is not sufficient as a security boundary if students
+can install their own Codex binary and reach model services directly. See
+[`ADMIN_ENFORCEMENT.md`](ADMIN_ENFORCEMENT.md) for the admin-side network,
+credential, and proxy controls.
 
 ## Student Behavior To Teach
 

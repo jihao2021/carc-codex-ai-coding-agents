@@ -45,7 +45,9 @@ defaults:
 - blocking `--ask-for-approval never`
 
 This is only a hard boundary if students are instructed, trained, or required
-to use `carc-codex` rather than invoking another unmanaged Codex binary.
+to use `carc-codex` rather than invoking another unmanaged Codex binary. For
+real enforcement, pair this root install with cluster network, credential, and
+proxy controls. See [`../docs/ADMIN_ENFORCEMENT.md`](../docs/ADMIN_ENFORCEMENT.md).
 
 ## Verify
 
