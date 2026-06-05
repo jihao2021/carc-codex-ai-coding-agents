@@ -1,8 +1,9 @@
 # Using Codex on CARC Discovery
 
 This is the student-facing quick start for running Codex on USC CARC
-Discovery. Use the user-tier wrapper for a personal pilot or workshop. For a
-class or shared cluster rollout, prefer the root-managed setup in
+Discovery. Use the user-tier wrapper for a personal pilot or workshop because
+there is no root-owned policy layer in `~/.codex`. For a class or shared
+cluster rollout, prefer the root-managed setup in
 [`root-install/`](../root-install/INSTALL.md).
 
 ## 1. Log in to Discovery
@@ -84,6 +85,11 @@ Inside Codex, run:
 
 These should show that the CARC precheck hook is loaded and that Codex is
 running with workspace-write sandboxing and untrusted approvals.
+
+If you run raw `codex` instead, it will read `~/.codex/config.toml`, but a
+user-owned config is only a default. The `carc-codex` wrapper is the recommended
+user-tier command because it passes the intended startup settings each time and
+blocks obvious bypass flags.
 
 ## 5. Good Student Workflows
 

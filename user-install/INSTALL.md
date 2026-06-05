@@ -2,6 +2,12 @@
 
 For your own account without root, or to ship to another CARC user.
 
+User install still includes the `carc-codex` wrapper. The normal `codex`
+command will read `~/.codex/config.toml`, but those settings are user-owned
+defaults, not admin-enforced requirements. The wrapper gives workshop users one
+recommended command that starts Codex with the intended CARC sandbox, approval,
+and hook settings, and blocks the most obvious bypass flags.
+
 This dir contains everything you need:
 
 ```
@@ -35,8 +41,9 @@ This is the Codex equivalent of the Claude user install:
 | `claude` | `carc-codex` |
 
 The extra `cp bin/carc-codex ~/.local/bin/carc-codex` line matters. It gives
-students a managed launch command that forces the CARC sandbox, approval mode,
-and hook settings when Codex starts.
+students a recommended launch command that forces the CARC sandbox, approval
+mode, and hook settings when Codex starts. It is not equivalent to
+`/etc/codex/requirements.toml`; users can still choose to run raw `codex`.
 
 Back up any pre-existing `~/.codex/AGENTS.md` / `~/.codex/config.toml` first if you have them — the `cp`s overwrite.
 
@@ -59,7 +66,8 @@ Send them `codex-cfg-carc.tar.gz`. They `tar xzf` it, `cd user-install`, and fol
 home directory as `~/.codex/config.toml`. This is your default, not policy.
 In user-tier:
 
-- `--dangerously-bypass-approvals-and-sandbox` still works.
+- `carc-codex` blocks `--dangerously-bypass-approvals-and-sandbox`, but raw
+  `codex` does not.
 - A student can edit `~/.codex/config.toml`.
 - A student can run `codex` directly instead of `carc-codex`.
 - Project-local config, hooks, or exec policies may still apply once the project is trusted.
