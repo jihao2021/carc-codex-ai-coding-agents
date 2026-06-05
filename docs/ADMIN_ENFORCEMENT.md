@@ -8,9 +8,6 @@ should be the primary Codex-side enforcement path:
 - `/etc/codex/managed_config.toml` for managed launch defaults
 - `/etc/codex/hooks/precheck.sh` for CARC-specific dynamic checks
 
-`carc-codex` can still be useful for no-root workshops, but it is no longer
-required as the root/admin enforcement mechanism.
-
 ## Why network policy still matters
 
 Students can install or copy their own Codex binary. The standalone installer
@@ -22,7 +19,7 @@ curl -fsSL https://chatgpt.com/codex/install.sh | sh
 
 Students may also install Codex with npm, use a binary downloaded elsewhere, or
 bring a copy from another machine. Because of that, a CARC deployment should not
-depend on PATH or a wrapper as the only control.
+depend on user-owned config or PATH-only controls as the only policy layer.
 
 ## What `/etc/codex/requirements.toml` can enforce
 
@@ -36,8 +33,8 @@ For Codex clients that honor the managed policy layer, CARC can enforce:
 - feature pins such as disabling browser/computer-use surfaces on the cluster
 - deny-read rules for common credential locations
 
-This is stronger than a wrapper because it follows the normal `codex` command
-as long as the installed Codex version supports managed requirements.
+This follows the normal `codex` command as long as the installed Codex version
+supports managed requirements.
 
 ## What managed Codex config cannot enforce
 

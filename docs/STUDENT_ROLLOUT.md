@@ -7,7 +7,6 @@ This repo packages a Codex-first CARC safety pattern:
   weaken from user config
 - `managed_config.toml` / `settings-user.toml` for Codex sandbox, approval,
   and hook defaults
-- `bin/carc-codex` launcher wrapper for no-root/user-tier pilots
 - `hooks/precheck.sh` for CARC-specific dynamic checks
 - `tests/` for dry-run validation of `ALLOW`, `ASK`, and `BLOCK` decisions
 

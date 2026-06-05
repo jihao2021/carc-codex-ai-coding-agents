@@ -24,9 +24,8 @@ sudo install -m 0644 -o root -g root managed_config.toml /etc/codex/managed_conf
 sudo install -m 0755 -o root -g root hooks/precheck.sh   /etc/codex/hooks/precheck.sh
 ```
 
-Students can then run the normal `codex` command. A `carc-codex` module or
-wrapper is no longer required for the root-managed policy layer, though a
-module is still useful if CARC wants to distribute a specific Codex version.
+Students can then run the normal `codex` command. A module is still useful if
+CARC wants to distribute a specific Codex version.
 
 ## How enforcement works
 

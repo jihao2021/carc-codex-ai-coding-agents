@@ -9,8 +9,7 @@ model is Codex-native:
   `managed_config.toml` for root installs
 - `settings-user.json` becomes `settings-user.toml`
 - the `PreToolUse` hook and test layout stay parallel
-- `bin/carc-codex` remains only for no-root/user-tier pilots; root installs
-  use Codex's own `/etc/codex/` managed policy files
+- both root and user installs use the normal `codex` command
 
 Pick one setup and `cd` into its dir; everything you need is inside it.
 
@@ -28,9 +27,8 @@ Codex-side policy layer.
 
 The user setup installs `~/.codex/config.toml` and
 `~/.codex/hooks/precheck.sh`, so users can run the normal `codex` command with
-CARC defaults. It also includes an optional `~/.local/bin/carc-codex` launcher
-for no-root workshops that want a stronger recommended command. User-tier
-config is not an admin boundary because students own those files.
+CARC defaults. User-tier config is not an admin boundary because students own
+those files.
 
 Important enforcement note: `/etc/codex/requirements.toml` controls recent
 Codex clients, but it does not stop a user from running an old or unmanaged

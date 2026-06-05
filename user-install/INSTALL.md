@@ -3,16 +3,13 @@
 For your own account without root, or to ship to another CARC user.
 
 User install is config-first: it overwrites `~/.codex/config.toml` with CARC
-defaults so users can start Codex with the normal `codex` command. The optional
-`carc-codex` wrapper is included only for no-root workshops that want a stronger
-recommended launch command.
+defaults so users can start Codex with the normal `codex` command.
 
 This dir contains everything you need:
 
 ```
 AGENTS.md
 settings-user.toml
-bin/carc-codex
 hooks/precheck.sh
 INSTALL.md          (this file)
 ```
@@ -51,35 +48,6 @@ codex
 Approve hooks when prompted. `/hooks` and `/permissions` inside Codex confirm
 what loaded.
 
-## Optional wrapper
-
-For a no-root workshop where you want one stronger recommended launch command,
-also install the wrapper:
-
-```bash
-cp bin/carc-codex ~/.local/bin/carc-codex
-chmod +x ~/.local/bin/carc-codex
-```
-
-When users start `carc-codex`, it passes these startup settings even if
-`~/.codex/config.toml` has drifted:
-
-- `--sandbox workspace-write`
-- `--ask-for-approval untrusted`
-- `--disable browser_use`
-- `--disable computer_use`
-- `--disable in_app_browser`
-- `sandbox_workspace_write.network_access=false`
-- `web_search="disabled"`
-- the CARC `PreToolUse` hook under `~/.codex/hooks/precheck.sh`
-
-It also rejects obvious attempts to turn those back on through `carc-codex`,
-such as `--search`, `--enable computer_use`,
-`--sandbox danger-full-access`, and `--ask-for-approval never`.
-
-The wrapper is still user-owned and optional. For true enforcement, use the
-root install's `/etc/codex/requirements.toml`.
-
 ## Ship to another user
 
 From the parent dir:
@@ -98,8 +66,6 @@ In user-tier:
 
 - Raw `codex` reads `~/.codex/config.toml`, but command-line flags can still
   override user-owned defaults.
-- `carc-codex` blocks `--dangerously-bypass-approvals-and-sandbox`, but raw
-  `codex` does not.
 - A student can edit `~/.codex/config.toml`.
 - Project-local config, hooks, or exec policies may still apply once the project is trusted.
 

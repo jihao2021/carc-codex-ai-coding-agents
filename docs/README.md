@@ -88,9 +88,6 @@ running with workspace-write sandboxing and untrusted approvals.
 
 This user-tier setup relies on `~/.codex/config.toml`. That is enough for the
 normal `codex` command to pick up CARC defaults, but it is still user-owned.
-For no-root workshops that want a stronger recommended command, install
-`bin/carc-codex` as `~/.local/bin/carc-codex`; it passes the same startup
-settings every time and blocks obvious bypass flags.
 
 ## 5. Good Student Workflows
 
@@ -129,8 +126,8 @@ Then run `codex` or the command you are testing inside that allocation.
 For longer work, switch from `debug` to the appropriate project partition and
 request only the resources you need.
 
-The wrapper's hook nudges or blocks risky commands on login nodes. If a command
-is blocked, move the work into Slurm instead of bypassing the wrapper.
+The CARC hook nudges or blocks risky commands on login nodes. If a command is
+blocked, move the work into Slurm instead of bypassing the policy.
 
 ## 7. Important Limits
 

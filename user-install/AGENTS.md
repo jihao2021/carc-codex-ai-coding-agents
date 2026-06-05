@@ -71,8 +71,8 @@ and for a real interactive session, swap `--partition=debug` for `main`
 the allocation (`tmux new-session -s agent`; `Ctrl+B D` to detach) if you
 want it to survive a disconnect.
 
-**When the managed policy or `carc-codex` wrapper is active, the PreToolUse
-hook enforces this, it doesn't just advise it.** On a login
+**When the managed policy is active, the PreToolUse hook enforces this, it
+doesn't just advise it.** On a login
 node it *blocks* parallel/distributed launchers (`mpirun`, `mpiexec`,
 `torchrun`, `deepspeed`, `accelerate launch`), long-running servers/runtimes
 (`jupyter lab`, `jupyter notebook`, `ollama serve`/`run`, `vllm serve`),
