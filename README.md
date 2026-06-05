@@ -9,10 +9,9 @@ Pick one setup and `cd` into its dir; everything you need is inside it.
 
 | You want… | Go to |
 |---|---|
-| You want... | Go to |
-|---|---|
 | Install root-owned CARC defaults and a managed `carc-codex` launcher | [`root-install/`](root-install/INSTALL.md) |
 | Install user-owned defaults for your account or a workshop handout | [`user-install/`](user-install/INSTALL.md) |
+| Use this on the CARC Discovery cluster | [`docs/`](docs/README.md) |
 
 Each dir contains its own copy of `AGENTS.md`, `config.toml`,
 `bin/carc-codex`, and `hooks/precheck.sh`. The root-tier config wires the
