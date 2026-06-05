@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REAL_CODEX="${CARC_CODEX_REAL:-codex}"
+
+prev=""
+for arg in "$@"; do
+  case "$arg" in
+    --dangerously-bypass-approvals-and-sandbox|--sandbox=danger-full-access|--ask-for-approval=never)
+      printf 'carc-codex: blocked unsafe Codex option: %s\n' "$arg" >&2
+      exit 2
+      ;;
+    danger-full-access|never)
+      if [ "$prev" = "--sandbox" ] || [ "$prev" = "-s" ] || [ "$prev" = "--ask-for-approval" ] || [ "$prev" = "-a" ]; then
+        printf 'carc-codex: blocked unsafe Codex option value: %s %s\n' "$prev" "$arg" >&2
+        exit 2
+      fi
+      ;;
+  esac
+  prev="$arg"
+done
+
+exec "$REAL_CODEX" \
+  --sandbox workspace-write \
+  --ask-for-approval untrusted \
+  --enable hooks \
+  -c 'hooks.PreToolUse=[{ matcher = "exec_command", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 }, { matcher = "apply_patch", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 }]' \
+  "$@"

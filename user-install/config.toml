@@ -1,0 +1,17 @@
+# User-tier CARC Codex defaults.
+#
+# This is a default, not a hard boundary. Students can override user-owned
+# config and can run `codex` directly unless the cluster exposes only a
+# managed launcher/module.
+
+sandbox_mode = "workspace-write"
+approval_policy = "untrusted"
+
+[features]
+hooks = true
+
+[hooks]
+PreToolUse = [
+  { matcher = "exec_command", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 },
+  { matcher = "apply_patch", command = "$HOME/.codex/hooks/precheck.sh", timeout = 10 },
+]

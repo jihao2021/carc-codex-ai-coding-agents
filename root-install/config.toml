@@ -1,0 +1,17 @@
+# CARC Codex reference config.
+#
+# The root install is enforced by the `bin/carc-codex` launcher, which passes
+# these settings on the command line. Keep this file as the auditable source
+# of truth and copy changes into the launcher when policy changes.
+
+sandbox_mode = "workspace-write"
+approval_policy = "untrusted"
+
+[features]
+hooks = true
+
+[hooks]
+PreToolUse = [
+  { matcher = "exec_command", command = "/etc/codex-carc/hooks/precheck.sh", timeout = 10 },
+  { matcher = "apply_patch", command = "/etc/codex-carc/hooks/precheck.sh", timeout = 10 },
+]
